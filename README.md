@@ -1,4 +1,9 @@
 # cleaning
+
+:::::::::::::::::::
+prerequisites
+:::::::::::::::::::
+
 make sure the following files are in the working directory before executing the code:
 X_test.txt
 X_train.txt
@@ -9,50 +14,35 @@ subject_train.txt
 features.txt
 activity_labels.txt
 
+:::::::::::::::::::
 how to use:
+:::::::::::::::::::
+
 copy the entire body of code in run_analysis.R
 paste in console
 as long as the prerequisite data files are there, it should produce the following two objects:
 
-datatable // the full, tidied data set of the means and st deviations of the collected data
+`datatable` // the full, tidied data set of the means and st deviations of the collected data
 
-uniques // the averaged means and st deviations for each individual activity and collected statistic
+`uniques` // the averaged means and st deviations for each individual activity and collected statistic
 
-codebook:
+:::::::::::::::::::
+what the code does:
+:::::::::::::::::::
 
-copied from the feature info of the original dataset:
-```
-The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAccXYZ and tGravityAccXYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+1. first reads all the files into memory. it stores the table X_test.txt into the object X_test, etc.
 
-Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerkXYZ and tBodyGyroJerkXYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
+2. creates an object meanstd which is a boolean vector that allows me to filter the column names by whether they contain "mean()" or "std()" making sure that the features that contained things like GravityMean were excluded
 
-Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAccXYZ, fBodyAccJerkXYZ, fBodyGyroXYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
+3. subsets the test and training sets then combines them into a data frame.
 
-These signals were used to estimate variables of the feature vector for each pattern:  
-'XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+4. does a 1:1 swap with activity labels which are originally a factor with number labels with descriptive character labels that detail what the participants are actually doing
 
-tBodyAccXYZ
-tGravityAccXYZ
-tBodyAccJerkXYZ
-tBodyGyroXYZ
-tBodyGyroJerkXYZ
-tBodyAccMag
-tGravityAccMag
-tBodyAccJerkMag
-tBodyGyroMag
-tBodyGyroJerkMag
-fBodyAccXYZ
-fBodyAccJerkXYZ
-fBodyGyroXYZ
-fBodyAccMag
-fBodyAccJerkMag
-fBodyGyroMag
-fBodyGyroJerkMag
+5. combines everything into a main clean raw dataset in the object `datatable`
 
-The set of variables that were estimated from these signals are: 
+6. tidies up the names of variables in datatable
 
-mean: Mean value
-std: Standard deviation
-```
+7. creates the `uniques` object that contains the summarised averages of the mean and standard deviations of measured datasets
 
-Additionally, in the tidied data set "uniques" we have "avg." appended to the left of these variable names to give the time-averaged standard deviation and mean of the given variables.
+8. renames the column names of uniques to reflect accurately that these are now averages rather than raw data
+

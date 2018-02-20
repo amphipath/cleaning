@@ -1,10 +1,14 @@
 readdata <- function(file) {
   assign(sub(".txt","",file),read.table(file))
 }
+wantread <- function(fil) {
+  match(fil,c("activity_labels.txt","features.txt","features_info.txt","subject_test.txt","subject_train.txt","X_test.txt","X_train.txt","y_test.txt","y_train.txt"),nomatch=0) > 0
+}
+
 
 filelist <- list.files()
-booboo <- filelist == "README.md" | filelist == "README.txt" | filelist == "run_analysis.R" | filelist == "features_info.txt"
-filelist <- filelist[!booboo]
+booboo <- wantread(filelist)
+filelist <- filelist[booboo]
 
 for(i in 1:length(filelist)) {assign(sub(".txt","",filelist[[i]]),read.table(filelist[[i]]))}
 
@@ -50,3 +54,6 @@ for(i in 3:length(colnames(datatable))) {
 }
 colnames(uniques) <- colnames(datatable)
 colnames(uniques)[3:length(colnames(uniques))] <- paste0("avg.",colnames(uniques)[3:length(colnames(uniques))])
+
+colnames(tidyset)
+
